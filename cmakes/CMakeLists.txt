@@ -2,4 +2,5 @@ cmake_minimum_required(VERSION 3.10)
 
 project(Chapter1)
 
-add_executable(Chapter1 ../Chapter1.cpp)
+SET(SOURCE ../pbPlots.cpp ../Chapter1.cpp ../supportLib.cpp)
+add_executable(Chapter1 ${SOURCE})
