@@ -9,6 +9,10 @@
 #include <time.h>
 using namespace std;
 
+
+//------------------------------------------------------------------------------
+// Question 1.1
+
 bool isUnique_char_bool(string &s){
 
     if(s.length() > 128){
@@ -91,12 +95,66 @@ void question1_1(){
     
 }
 
-int main(){
-    question1_1();
-    vector<double> x{-2, -1, 0, 1, 2};
-    vector<double> y{2, -1, -2, -1, 2};
+//------------------------------------------------------------------------------
+// Question 1.2
+bool isPermutation(string s1, string s2){
+    if (s1.length() != s2.length()){
+        return false;
+    }
+    vector<int> count_char(128);
+    for(char &c: s1){
+        count_char[(int)c] ++;
+    }
 
-    saveImage("test2.png", x, y);
+    for(char &c: s2){
+        count_char[(int)c] --;
+        if (count_char[(int)c] < 0){
+            return false;
+        }
+    }
+
+    int sum = 0;
+    for(int &i: count_char){
+        sum += abs(i);
+    }
+
+    if (sum == 0){
+        return true;
+    }
+    return false;
+}
+
+void question_1_2(){
+    vector<string> words = {"abcde", "abced", "abced", "abcvdf", "padlee"};
+    for (int i=0; i < words.size() - 1; i++){
+        cout << words[i] << string(": ") << words[i+1] << string(" --> ") 
+         << boolalpha << isPermutation(words[i], words[i+1]) <<endl;
+    }
+
+    cout << endl;
+    int n_char = 50000;
+    vector<double> x(n_char, 0);
+    vector<double> y(n_char, 0);
+    for(int i=1; i<n_char; i++){
+        string s1 = randomWord(i);
+        string s2 = randomWord(i);
+        clock_t tStart = clock();
+        isPermutation(s1, s2);
+        double time = (double)(clock() - tStart)/CLOCKS_PER_SEC;
+        double avarage = 0;
+        for(int j=0; j<i; j++){
+            avarage = avarage + y[j];
+        }
+        // y[i] = (avarage + time)/i;
+        y[i] = time;
+        x[i] = (double)i;
+    }
+    saveImage("question_1_2.png", x, y);
+}
+
+int main(){
+    // question1_1();
+    question_1_2();
     return 0;
 }
 
