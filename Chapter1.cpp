@@ -1,3 +1,5 @@
+//------------------------------------------------------------------------------
+// Setup
 #include <iostream>
 #include "linkedList.cpp"
 #include "hashTable.cpp"
@@ -73,7 +75,7 @@ void question1_1(){
     }
 
     cout << endl;
-    int n_char = 1000;
+    int n_char = 50000;
     vector<double> x(n_char, 0);
     vector<double> y(n_char, 0);
     for(int i=1; i<n_char; i++){
@@ -85,8 +87,8 @@ void question1_1(){
         for(int j=0; j<i; j++){
             avarage = avarage + y[j];
         }
-        y[i] = (avarage + time)/i;
-        // y[i] = time;
+        // y[i] = (avarage + time)/i;
+        y[i] = time;
         x[i] = (double)i;
     }
     saveImage("question_1_1.png", x, y);
@@ -97,6 +99,7 @@ void question1_1(){
 
 //------------------------------------------------------------------------------
 // Question 1.2
+
 bool isPermutation(string s1, string s2){
     if (s1.length() != s2.length()){
         return false;
@@ -145,16 +148,77 @@ void question_1_2(){
         for(int j=0; j<i; j++){
             avarage = avarage + y[j];
         }
-        // y[i] = (avarage + time)/i;
-        y[i] = time;
+        y[i] = (avarage + time)/i;
+        // y[i] = time;
         x[i] = (double)i;
     }
     saveImage("question_1_2.png", x, y);
 }
 
+//------------------------------------------------------------------------------
+// Question 1.3
+
+string repleceSpace(string s, int length){
+    int n_spaces = (s.length() - length)/2;
+    int spaceCount = 0, charCount = 0;
+    string result(s.length(), 0);
+
+    for(char &c: s){
+        if (c == ' '){
+            result[charCount] = '%';
+            result[charCount+1] = '2';
+            result[charCount+2] = '0';
+            charCount += 3;
+            spaceCount ++;
+        }
+        else{
+            result[charCount] = c;
+            charCount ++;
+        }
+        if (charCount == result.length()){
+            return result;
+        }
+    }
+    return result;
+
+}
+
+void replaceSpaceSolution(string* s, int trueLength){
+    int spaceCount = (s->length() - trueLength)/2;
+    int index, i = 0;
+    
+    index = s->length() - 1;
+    if (trueLength < s->length())
+        s[trueLength] = '\0';
+    for (i = trueLength - 1; i >= 0; i--){
+        if (s->at(i) == ' '){
+            s->at(index - 1) = '0';
+            s->at(index - 2) = '2';
+            s->at(index - 3) = '%';
+            index -= 3;
+        }
+        else{
+            s->at(index - 1) = s->at(i);
+            index --;
+        }
+    }
+}
+
+void question_1_3(){
+    string words = {"Mr John Smith    "};
+    string result = repleceSpace(words, 13);
+    cout << "Replace all spaces:" << endl;
+    cout << result << endl << endl;
+
+    cout << "Replace all spaces (book solution):" << endl;
+    replaceSpaceSolution(&words, 13);
+    cout << words << endl << endl;
+}
+
 int main(){
     // question1_1();
-    question_1_2();
+    // question_1_2();
+    question_1_3();
     return 0;
 }
 
