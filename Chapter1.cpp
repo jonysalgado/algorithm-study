@@ -215,10 +215,101 @@ void question_1_3(){
     cout << words << endl << endl;
 }
 
+
+//------------------------------------------------------------------------------
+// Question 1.4
+
+bool isValidChar(char c){
+    if ((int)c <= (int)'z' && (int)c >= (int)'a')
+        return true;
+    return false;
+}
+
+char putLowerCase(char c){
+    if ((int)c <= (int)'Z' && (int)c >= (int)'A'){
+        int lower = c - (int)'A' + (int)'a';
+        return (char)lower;
+    }
+    return c;
+
+}
+
+bool isPalindromePermutation(string s){
+    bool isOdd;
+    int nChars = (int)'z' - (int)'a' + 1;
+    int count = 0;
+    vector<int> countChars(nChars, 0);
+    char aux;
+    for(char &c: s){
+        aux = putLowerCase(c);
+        if(isValidChar(aux)){
+            count += 1;
+            countChars.at(((int)aux - (int)'a')) += 1;
+        }
+    }   
+    isOdd = (bool)(count % 2);
+    bool findNoPair = false;
+    for(int i = 0; i < nChars; i++){
+        if(countChars.at(i)%2 == 1){
+            if(!isOdd)
+                return false;
+            if(findNoPair){
+                return false;
+            }
+            findNoPair = true;
+        }
+    }
+    return true;
+}
+
+int toggle(int bitVector, char c){
+    if(!isValidChar(c))
+        return bitVector;
+    
+    int mask = 1 << (int)c;
+    if((bitVector & mask) == 0){
+        bitVector |= mask;
+    }
+    else{
+        bitVector &= ~mask;
+    }
+    return bitVector;
+}
+
+int createBitVector(string s){
+    int bitVector = 0;
+    for(char &c: s){
+        bitVector = toggle(bitVector, putLowerCase(c));
+    }
+    return bitVector;
+}
+
+
+bool isPalindromePermutationSolution(string s){
+    int bitVector = createBitVector(s);
+    return (bitVector & (bitVector - 1)) == 0;
+}
+
+void question_1_4(){
+    vector<string> words = {"Tact Coa", "asfdsf dsvsfv _ arefw", "abcabcabcd", "abcaBC"};
+    cout << "Is Palindrome Permutation?" << endl;
+    for(auto &word: words){
+        cout << word << string(": ") << boolalpha <<  isPalindromePermutation(word) <<endl;
+    }
+
+    cout << endl << "Is Palindrome Permutation? (book solution):" << endl;
+
+    for(auto &word: words){
+        cout << word << string(": ") << boolalpha <<  isPalindromePermutationSolution(word) <<endl;
+    }
+}
+
 int main(){
     // question1_1();
     // question_1_2();
-    question_1_3();
+    // question_1_3();
+    question_1_4();
+    // cout << boolalpha << isValidChar(' ');
     return 0;
 }
 
