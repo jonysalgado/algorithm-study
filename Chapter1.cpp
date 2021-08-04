@@ -9,6 +9,7 @@
 #include <bitset>
 #include <stdlib.h>
 #include <time.h>
+#include <cmath>
 using namespace std;
 
 
@@ -304,12 +305,52 @@ void question_1_4(){
     }
 }
 
+//------------------------------------------------------------------------------
+// Question 1.5
+
+bool hasOnlyOneWay(string first, string second){
+    if(abs((long)(first.length()-second.length())) > 1)
+        return false;
+    
+    string s1 = first.length() < second.length() ? first: second;
+    string s2 = first.length() < second.length() ? second: first;
+
+    int idx1 = 0, idx2 = 0;
+    bool foundDifference = false;
+    while(idx2 < s2.length() && idx1 < s1.length()){
+        if(s1[idx1] != s2[idx2]){
+            if(foundDifference)
+                return false;
+            foundDifference = true;
+            if(s1.length() == s2.length())
+                idx1 ++;
+        }
+        else
+            idx1 ++;
+        idx2 ++;
+    }
+    
+    return true;
+    
+}
+
+void question_1_5(){
+    vector<string> words = {"pale", "ple", "pales", "pale", "pale", "bale", "pale", "bake"};
+
+    cout << "Is there only one difference (insert, delete or replace character)?" << endl;
+    for(int i=0; i < words.size() - 1; i++){
+        cout << words[i] << string(", ") << words[i+1] << string(" --> ") 
+            << boolalpha <<  hasOnlyOneWay(words[i], words[i+1]) <<endl;
+    }
+}
+
 int main(){
     // question1_1();
     // question_1_2();
     // question_1_3();
-    question_1_4();
-    // cout << boolalpha << isValidChar(' ');
+    // question_1_4();
+    question_1_5();
+    
     return 0;
 }
 
